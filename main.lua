@@ -1,6 +1,7 @@
 love.load = function ()
    x,y = 0,0
    currentCollumn = 0
+   placed = {}
    active = {}
    active.pos = 0
    active.height = 100
@@ -61,6 +62,9 @@ love.draw = function ()
   love.graphics.line( x, y, mouseX, mouseY)
 
   figures[active.figure]()
+  for k,place in pairs(placed) do
+     figures[place]()
+  end
 end
 
 love.update = function(dt)
@@ -70,16 +74,24 @@ love.update = function(dt)
    y = y + 1
    active.pos = active.pos + 1 
    if (active.pos + active.height) >= height then
+      table.insert(placed, active.figure)
       active.pos = 0
       active.figure = figures[math.random(#figures)]
    end
+end
 
-   if love.keyboard.isDown("left") then
+love.keypressed = function(key, unicode, isrepeat)
+   if isrepeat then
+      return
+   end
+
+   if key == "left" then
+      isLeftMovable = false
       if currentCollumn > 0 then
          currentCollumn = currentCollumn - 1
       end
    end
-   if love.keyboard.isDown("right") then
+   if key == "right" then
       if currentCollumn < 10 then
       currentCollumn = currentCollumn + 1
       end
