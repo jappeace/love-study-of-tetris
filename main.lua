@@ -1,13 +1,87 @@
 love.load = function ()
+   x,y = 0,0
+   currentCollumn = 0
+   active = {}
+   active.pos = 0
+   active.height = 100
+   active.figure = 't'
+   figures = {'t', '|', 'square', 'L'} 
+
+   figures.t = function () 
+      love.graphics.setColor(1, 0, 1, 1)
+      love.graphics.rectangle('fill', 0 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.75, 0, 1, 1)
+      love.graphics.rectangle('fill', 50 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.5, 0, 1, 1)
+      love.graphics.rectangle('fill', 100 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.25, 0, 1, 1)
+      love.graphics.rectangle('fill', 50 + (currentCollumn * 50), 0+active.pos, 50, 50)
+   end
+
+   figures['|'] = function()
+      love.graphics.setColor(1, 0, 1, 1)
+      love.graphics.rectangle('fill', 00 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.75, 0, 1, 1)
+      love.graphics.rectangle('fill', 50 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.5, 0, 1, 1)
+      love.graphics.rectangle('fill', 100 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.25, 0, 1, 1)
+      love.graphics.rectangle('fill', 150 + (currentCollumn * 50), 50+active.pos, 50, 50)
+   end
+
+   figures.square = function()
+      love.graphics.setColor(1, 0, 1, 1)
+      love.graphics.rectangle('fill', 0 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.75, 0, 1, 1)
+      love.graphics.rectangle('fill', 50 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.5, 0, 1, 1)
+      love.graphics.rectangle('fill', 0 + (currentCollumn * 50), 00+active.pos, 50, 50)
+      love.graphics.setColor(0.25, 0, 1, 1)
+      love.graphics.rectangle('fill', 50 + (currentCollumn * 50), 00+active.pos, 50, 50)
+   end
+
+   figures.L= function()
+      love.graphics.setColor(1, 0, 1, 1)
+      love.graphics.rectangle('fill', 0+ (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.75, 0, 1, 1)
+      love.graphics.rectangle('fill', 50 + (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.5, 0, 1, 1)
+      love.graphics.rectangle('fill', 100+ (currentCollumn * 50), 50+active.pos, 50, 50)
+      love.graphics.setColor(0.25, 0, 1, 1)
+      love.graphics.rectangle('fill', 100+ (currentCollumn * 50), 0+active.pos, 50, 50)
+   end
+
 end
 
 love.draw = function ()
-  love.graphics.print('Hello, World!', 400, 300)
-  love.graphics.print('Hello, World!', 500, 300)
-  love.graphics.print('Hello, World!', 800, 300)
-  love.graphics.print('Hello, World!', 400, 220)
-  love.graphics.print('Hello, World!', 400, 900)
+  love.graphics.setColor(1, 1, 1, 1)
+  love.graphics.print('Hello, World!' .. currentCollumn , 500, 300)
+
+  love.graphics.print('Hello, World!' .. active.figure, 400, 400)
+  love.graphics.line( x, y, mouseX, mouseY)
+
+  figures[active.figure]()
 end
 
 love.update = function(dt)
+   mouseX, mouseY = love.mouse.getPosition()
+   width, height = love.graphics.getDimensions( )
+   x = x + 1
+   y = y + 1
+   active.pos = active.pos + 1 
+   if (active.pos + active.height) >= height then
+      active.pos = 0
+      active.figure = figures[math.random(#figures)]
+   end
+
+   if love.keyboard.isDown("left") then
+      if currentCollumn > 0 then
+         currentCollumn = currentCollumn - 1
+      end
+   end
+   if love.keyboard.isDown("right") then
+      if currentCollumn < 10 then
+      currentCollumn = currentCollumn + 1
+      end
+   end
 end
