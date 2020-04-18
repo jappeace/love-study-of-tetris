@@ -56,6 +56,39 @@ love.load = function ()
       love.graphics.rectangle('fill', 0+ offsetX, offsetY, 50, 50)
    end
 
+   figures.tiles = function (fig, col, row) 
+      local result = {}
+
+      if active.figure == '|' then
+         table.insert(result, {column=col, row=row})
+         table.insert(result, {column=col+1, row=row})
+         table.insert(result, {column=col+2, row=row})
+         table.insert(result, {column=col+3, row=row})
+      end
+
+      if fig == 't' then
+         table.insert(result, {column=col, row=row+50})
+         table.insert(result, {column=col+1, row=row+50})
+         table.insert(result, {column=col+2, row=row+50})
+         table.insert(result, {column=col+1, row=row})
+      end
+
+      if fig == 'square' then
+         table.insert(result, {column=col, row=row+50})
+         table.insert(result, {column=col+1, row=row+50})
+         table.insert(result, {column=col, row=row})
+         table.insert(result, {column=col+1, row=row})
+      end
+
+      if fig == 'L' then
+         table.insert(result, {column=col, row=row+50})
+         table.insert(result, {column=col+1, row=row+50})
+         table.insert(result, {column=col+2, row=row+50})
+         table.insert(result, {column=col+2, row=row})
+      end
+      return result
+   end
+
 end
 
 -- love.graphics.rectangle('fill', 0+ (currentCollumn * 50), 50+active.pos, 50, 50)
@@ -76,6 +109,7 @@ love.draw = function ()
 end
 
 
+
 love.update = function(dt)
    mouseX, mouseY = love.mouse.getPosition()
    width, height = love.graphics.getDimensions( )
@@ -85,31 +119,10 @@ love.update = function(dt)
 
    active.pos = active.pos + 5 
 
-   insert = function () 
-      if active.figure == '|' then
-         table.insert(placed, {column=currentCollumn, row=active.pos})
-         table.insert(placed, {column=currentCollumn+1, row=active.pos})
-         table.insert(placed, {column=currentCollumn+2, row=active.pos})
-         table.insert(placed, {column=currentCollumn+3, row=active.pos})
-      end
-      if active.figure == 't' then
-         table.insert(placed, {column=currentCollumn, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+1, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+2, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+1, row=active.pos})
-      end
-      if active.figure == 'square' then
-         table.insert(placed, {column=currentCollumn, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+1, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn, row=active.pos})
-         table.insert(placed, {column=currentCollumn+1, row=active.pos})
-      end
+   insert = function (offset) 
 
-      if active.figure == 'L' then
-         table.insert(placed, {column=currentCollumn, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+1, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+2, row=active.pos+50})
-         table.insert(placed, {column=currentCollumn+2, row=active.pos})
+      for k,v in pairs(figures.tiles(active.figure, currentCollumn, active.pos + offset)) do
+         table.insert(placed, v)
       end
 
       active.pos = 0
@@ -122,19 +135,35 @@ love.update = function(dt)
       end
    end
 
-   collisionCheck = function (place)
-      return place.column == currentCollumn and active.pos + active.height == place.row
+   collisionCheckActiveTile = function (gridTile, actTile )
+      if gridTile.column ~= actTile.column then
+         return false
+      end
+
+      if gridTile.row < actTile.row and (gridTile.row + 50) > actTile.row then
+         return true
+      end
+      return false
+   end
+
+   collisionCheck = function (gridTile)
+      for k,v in pairs(figures.tiles(active.figure, currentCollumn, active.pos)) do
+         if collisionCheckActiveTile(gridTile,v) then
+            return true
+         end
+      end
+      return false
    end
 
    -- collision detect
   for k,place in pairs(placed) do
      if collisionCheck(place) then
-      insert()
+      insert(-50)
      end
   end
 
    if (active.pos + active.height) >= height then
-      insert()
+      insert(0)
    end
 
 end
