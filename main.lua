@@ -65,7 +65,7 @@ love.draw = function ()
 
   figures[active.figure]((currentCollumn * 50), active.pos)
   for k,place in pairs(placed) do
-     figures[place['figure']](place['column'] * 50, place['row'])
+     figures[place.figure](place.column * 50, place.row)
   end
 end
 
@@ -75,11 +75,25 @@ love.update = function(dt)
    x = x + 1
    y = y + 1
    active.pos = active.pos + 1 
-   -- collision detect
-   if (active.pos + active.height) >= height then
+
+   insert = function () 
       table.insert(placed, {figure=active.figure, column=currentCollumn, row=active.pos})
       active.pos = 0
       active.figure = figures[math.random(#figures)]
+   end
+
+   collisionCheck = function (place)
+      return place.column == currentCollumn and active.pos + active.height == place.row
+   end
+   -- collision detect
+  for k,place in pairs(placed) do
+     if collisionCheck(place) then
+      insert()
+     end
+  end
+
+   if (active.pos + active.height) >= height then
+      insert()
    end
 end
 
