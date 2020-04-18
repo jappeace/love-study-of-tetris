@@ -1,10 +1,7 @@
 default: run
 
-lint:
-	@- find src/ -name '*.lua' -type f | xargs luacheck
-
-run: lint
-	@- love .
+run: 
+	nix-shell -p love_11 --run "love ."
 
 package: lint
 	@- zip -r out/deadly-siege.love *
