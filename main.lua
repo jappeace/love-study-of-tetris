@@ -143,7 +143,7 @@ love.update = function(dt)
          return
       end
 
-      for k,v in pairs(figures.tiles(active.figure, currentCollumn, active.pos + offset)) do
+      for k,v in pairs(figures.tiles(active.figure, currentCollumn, ((math.ceil(active.pos/50)-1)*50) + offset)) do
          table.insert(placed, v)
       end
       active.pos = 0

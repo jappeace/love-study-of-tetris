@@ -4,7 +4,7 @@
 
 * DONE Be able to die and reset
 
-* TODO Fix rows snapping
+* DONE Fix rows snapping
   If we collide we should be snapped to the grid
 
 * TODO Solving of rows
