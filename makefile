@@ -1,7 +1,7 @@
 default: run
 
 run: 
-	nix-shell -p love_11 --run "love ."
+	nix-shell --run "love ."
 
 package: lint
 	@- zip -r out/deadly-siege.love *
