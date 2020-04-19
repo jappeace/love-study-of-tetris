@@ -1,5 +1,6 @@
 love.load = function ()
    x,y = 0,0
+   speed = 1
    currentCollumn = 0
    placed = {}
    active = {}
@@ -117,14 +118,12 @@ love.update = function(dt)
    x = x + 1
    y = y + 1
 
-   active.pos = active.pos + 5 
+   active.pos = active.pos + speed
 
    insert = function (offset) 
-
       for k,v in pairs(figures.tiles(active.figure, currentCollumn, active.pos + offset)) do
          table.insert(placed, v)
       end
-
       active.pos = 0
       active.figure = figures[math.random(#figures)]
 
@@ -139,8 +138,7 @@ love.update = function(dt)
       if gridTile.column ~= actTile.column then
          return false
       end
-
-      if gridTile.row < actTile.row and (gridTile.row + 50) > actTile.row then
+      if gridTile.row < (actTile.row + 50) and (gridTile.row + 50) > actTile.row then
          return true
       end
       return false
@@ -158,7 +156,7 @@ love.update = function(dt)
    -- collision detect
   for k,place in pairs(placed) do
      if collisionCheck(place) then
-      insert(-50)
+      insert(0)
      end
   end
 
@@ -169,10 +167,12 @@ love.update = function(dt)
 end
 
 love.keypressed = function(key, unicode, isrepeat)
+   if key == "down" then
+      speed = speed + 1
+   end
    if isrepeat then
       return
    end
-
    if key == "left" then
       isLeftMovable = false
       if currentCollumn > 0 then
