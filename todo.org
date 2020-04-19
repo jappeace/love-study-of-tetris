@@ -1,0 +1,10 @@
+
+
+* TODO Fix collision on the ground
+* TODO Be able to die and reset
+* TODO Fix rows snapping
+  If we collide we should be snapped to the grid
+
+* TODO Solving of rows
+  a full row should disapear and add points? speedup?
+
