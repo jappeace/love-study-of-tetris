@@ -1,12 +1,18 @@
 
 
 * DONE Fix collision on the ground
-
 * DONE Be able to die and reset
-
 * DONE Fix rows snapping
   If we collide we should be snapped to the grid
 
-* TODO Solving of rows
+* DONE Solving of rows
   a full row should disapear and add points? speedup?
 
+** DONE after insert, 
+
+   
+
+* DONE Rotation
+
+* TODO Scoring maybe?
+  no lol
