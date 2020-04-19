@@ -1,6 +1,6 @@
 love.load = function ()
    x,y = 0,0
-   speed = 1
+   speed = 50
    currentCollumn = 0
    placed = {}
    active = {}
@@ -135,7 +135,7 @@ love.update = function(dt)
    x = x + 1
    y = y + 1
 
-   active.pos = active.pos + speed
+   active.pos = active.pos + speed * dt
 
    insert = function (offset) 
       if active.pos < 50 then
@@ -193,7 +193,7 @@ love.keypressed = function(key, unicode, isrepeat)
       return
    end
    if key == "down" then
-      speed = speed + 1
+      speed = speed + 10
    end
    if isrepeat then
       return
