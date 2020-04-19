@@ -1,7 +1,9 @@
 
 
-* TODO Fix collision on the ground
-* TODO Be able to die and reset
+* DONE Fix collision on the ground
+
+* DONE Be able to die and reset
+
 * TODO Fix rows snapping
   If we collide we should be snapped to the grid
 

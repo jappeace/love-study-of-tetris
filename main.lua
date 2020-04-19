@@ -4,9 +4,18 @@ love.load = function ()
    currentCollumn = 0
    placed = {}
    active = {}
+   active.isDead = false
    active.pos = 0
    active.height = 100
    active.figure = 't'
+   active.reset = function () 
+      placed = {}
+      active.isDead = false
+      active.pos = 0
+      active.height = 100
+      active.figure = 't'
+      speed = 1
+   end
    figures = {'t', '|', 'square', 'L'} 
 
    figures.t = function (offsetX, offsetY) 
@@ -95,6 +104,13 @@ end
 -- love.graphics.rectangle('fill', 0+ (currentCollumn * 50), 50+active.pos, 50, 50)
 
 love.draw = function ()
+  if active.isDead then
+      love.graphics.setColor(1, 1, 1, 1)
+      love.graphics.print('Oh noes, you died!!!' .. currentCollumn , 500, 300)
+      love.graphics.print('Press any key to restart', 300, 500)
+     return
+  end
+
   love.graphics.setColor(1, 1, 1, 1)
   love.graphics.print('Hello, World!' .. currentCollumn , 500, 300)
 
@@ -106,12 +122,13 @@ love.draw = function ()
   for k,place in pairs(placed) do
      figures.tile(place.column*50, place.row) 
   end
-
 end
 
-
-
 love.update = function(dt)
+   if active.isDead then
+      return
+   end
+
    mouseX, mouseY = love.mouse.getPosition()
    width, height = love.graphics.getDimensions( )
 
@@ -121,6 +138,11 @@ love.update = function(dt)
    active.pos = active.pos + speed
 
    insert = function (offset) 
+      if active.pos < 50 then
+         active.isDead = true
+         return
+      end
+
       for k,v in pairs(figures.tiles(active.figure, currentCollumn, active.pos + offset)) do
          table.insert(placed, v)
       end
@@ -159,7 +181,6 @@ love.update = function(dt)
       insert(0)
      end
   end
-
    if (active.pos + active.height) >= height then
       insert(0)
    end
@@ -167,6 +188,10 @@ love.update = function(dt)
 end
 
 love.keypressed = function(key, unicode, isrepeat)
+   if active.isDead then
+      active.reset()
+      return
+   end
    if key == "down" then
       speed = speed + 1
    end
