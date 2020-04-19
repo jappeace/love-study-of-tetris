@@ -5,8 +5,13 @@
 In this project love interprets lua code,
 resulting in a tetris game.
 
+# Installing and running
+
+install [nix](https://nixos.org/download.html)
+run this:
+
 ```shell
-nix-shell -p love_11 --run "make run"
+make
 ```
 
 Have fun!
